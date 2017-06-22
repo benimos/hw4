@@ -3,6 +3,7 @@
 number = input('Enter number : ')
 
 referCntList = []
+referredCntList = []
 manyReferredList = []
 TerminalCheckList = []
 TerminalCheckListTmp = []
@@ -16,13 +17,17 @@ for line in open('referCnt.txt', 'r'):
 #referredCnt.txtから参照された回数を取得
 for line in open('referredCnt.txt', 'r'):
 	referredList = line[:-1].split('\t')
-	if int(referredList[1]) >= int(number):
-		manyReferredList.append([int(referredList[0]),int(referredList[1])])
-manyReferredList.sort(key=lambda x:x[1], reverse=True)
+	referredCntList.append([int(referredList[0]),int(referredList[1])])
+referredCntList.sort(key=lambda x:x[1], reverse=True)
+
+#inputよりも多く参照されているものはmanyReferredListへ
+for i in range(len(referredCntList)-1):
+	if int(referredCntList[i][1]) >= int(number):
+		manyReferredList.append([int(referredCntList[i][0]),int(referredCntList[i][1])])
 		
 #ターミナル駅型のページを検索
-for i in range(len(manyReferredList)):
-	TerminalCheckList.append([manyReferredList[i][0],(referCntList[i] + manyReferredList[i][1])])
+for i in range(30):
+	TerminalCheckList.append([referredCntList[i][0],(referCntList[i] + referredCntList[i][1])])
 TerminalCheckList.sort(key=lambda x:x[1], reverse=True)
 
 #先頭からとってきて、pageListからページの名前撮ってくる！
